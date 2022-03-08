@@ -20,14 +20,15 @@ const checkAuthenticated = (req, res, next) => {
 }
 
 // https://stackoverflow.com/questions/59534258/how-to-form-authentication-header-for-axios-request-to-node-js-app-using-passpor
-/*
+
 router.all('*', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
-*/
+
 
 router.get('/check', checkAuthenticated);
 router.get('/nlu_structures', checkAuthenticated, get_nlu_structure);
