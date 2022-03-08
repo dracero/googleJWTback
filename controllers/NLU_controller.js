@@ -58,10 +58,17 @@ const delete_nlu_structure = async (req, res, next) => {
     }
 }
 
+const logout = (req, res, next) => {
+    req.logOut()
+    res.redirect("http://localhost:3000/")
+    console.log(`-------> User Logged out`)
+}
+
 export {
     get_nlu_structure,
     get_nlu_structure_name,
     add_nlu_structure,
     put_nlu_structure,
     delete_nlu_structure,
+    logout
 }

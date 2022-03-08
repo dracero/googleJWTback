@@ -140,14 +140,3 @@ const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en: http://localhost:${PORT}`);
 });
-
-
-
-/*
-//Define the Logout
-app.post("/logout", (req,res) => {
-    req.logOut()
-    res.redirect("/login")
-    console.log(`-------> User Logged out`)
-})
-*/
