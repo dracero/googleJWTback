@@ -16,6 +16,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.js";
 
 import session from 'express-session';
+import jwt from 'jsonwebtoken';
 
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
@@ -31,12 +32,6 @@ mongoose.set('useCreateIndex', true);
 
 const app = express();
 app.use(cookieParser());
-
-// set the view engine to ejs
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-
 app.use(cors());
 // TODO: Revisar si hace falta
 app.use(express.json());
@@ -60,6 +55,9 @@ app.use(passport.session())    //allow passport to use "express-session"
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 
+const authUser = (request, accessToken, refreshToken, profile, done) => {
+  return done(null, profile);
+}
 
 //Use "GoogleStrategy" as the Authentication Strategy
 passport.use(new GoogleStrategy({
@@ -67,10 +65,7 @@ passport.use(new GoogleStrategy({
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: "http://localhost:8080/auth/google/callback",
   passReqToCallback   : true
-},
-(request, accessToken, refreshToken, profile, done) => {
-  return done(null, profile);
-}));
+  }, authUser));
 
 
 passport.serializeUser( async (user, done) => { 
@@ -108,14 +103,38 @@ const conn = mongoose.createConnection(
   }
 );
 
-//si la base de datos no existe Mongo la crea
-app.use(nluRouter);
-
 app.use(
   '/docs',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument)
 );
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ] }
+));
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate("google"),
+  function (req, res) {
+    if (req.user) { 
+       const token = jwt.sign({id: req.user.email}, 'top_secret', {
+        expiresIn: 60 * 60 * 24 // equivalente a 24 horas
+      })
+      res.cookie('token', token)  
+    }      
+    res.redirect('http://localhost:3000/')
+  }
+);
+//Here is the secrete of all, passing the value in res.locals variable
+app.use((req, res, next) => {
+  console.log("req.isAuthenticated():",req.isAuthenticated());
+  res.locals.authenticated = req.isAuthenticated();
+  next();
+});
+
+app.use('/', nluRouter)
 
 const PORT = process.env.PORT || 8080
 

@@ -1,14 +1,6 @@
 import BaseDeDatos from "../dao/BaseDeDatos.js";
-import passport from 'passport';
-
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
-import jwt from 'jsonwebtoken';
-
-
 
 let baseDeDatos = new BaseDeDatos();
-
 
 
 const get_nlu_structure = async (req, res, next) => {
@@ -66,29 +58,10 @@ const delete_nlu_structure = async (req, res, next) => {
     }
 }
 
-const auth_google = async (req, res, next) => {
-
-    const handler = passport.authenticate('google', { scope: [ 'email', 'profile' ] });
-    handler(req, res, next);
-}
-
-const auth_google_callback = async (req, res, next) => {
-    if (req.user) { 
-        const token = jwt.sign({id: req.user.email}, 'top_secret', {
-            expiresIn: 60 * 60 * 24 // equivalente a 24 horas
-        })
-        res.cookie('token', token)
-    }
-
-    res.redirect('http://localhost:3000/');
-}
-
 export {
     get_nlu_structure,
     get_nlu_structure_name,
     add_nlu_structure,
     put_nlu_structure,
     delete_nlu_structure,
-    auth_google,
-    auth_google_callback
 }
