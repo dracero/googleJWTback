@@ -22,7 +22,7 @@ import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import './config/database.js';
-import docente from './models/users.js';
+//import docente from './models/users.js';
 import Strategy from 'passport-google-oauth2';
 const GoogleStrategy = Strategy;
 
@@ -72,10 +72,16 @@ passport.serializeUser( async (user, done) => {
   console.log(`\n--------> Serialize User:`)
   console.log(user)
 
+  /*
+
   //TODO: cambiar
   if (!await docente.findOne({email: user.email})){
     await docente.create({email:user.email});
-   }
+  }
+
+  */
+
+
    // The USER object is the "authenticated user" from the done() in authUser function.
    // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session.  
 
