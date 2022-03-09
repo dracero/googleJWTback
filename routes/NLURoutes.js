@@ -34,7 +34,7 @@ router.get('/logout', logout);
 router.get('/nlu_structures', checkAuthenticated, get_nlu_structure);
 router.get('/nlu_structure_name', checkAuthenticated, get_nlu_structure_name);
 router.post('/nlu_structure', checkAuthenticated, add_nlu_structure);
-router.put('/nlu_structure/:id', checkAuthenticated, put_nlu_structure);
-router.delete('/nlu_structure/:id', checkAuthenticated, delete_nlu_structure);
+router.put('/nlu_structure/:id', put_nlu_structure);
+router.delete('/nlu_structure/:id', delete_nlu_structure);
 
 export default router

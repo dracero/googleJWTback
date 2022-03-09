@@ -45,7 +45,6 @@ const put_nlu_structure = async (req, res, next) => {
 }
 
 const delete_nlu_structure = async (req, res, next) => {
-
     try {
         const nlu_structure = await baseDeDatos.delete_nlu_structure(req.params.id);
 
