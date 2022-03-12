@@ -7,6 +7,7 @@ import {
   delete_nlu_structure,
   logout
 } from '../controllers/NLU_controller.js'
+import passport from 'passport'
 
 const router = express.Router();
 
@@ -34,7 +35,8 @@ router.get('/logout', logout);
 router.get('/nlu_structures', checkAuthenticated, get_nlu_structure);
 router.get('/nlu_structure_name', checkAuthenticated, get_nlu_structure_name);
 router.post('/nlu_structure', checkAuthenticated, add_nlu_structure);
-router.put('/nlu_structure/:id', put_nlu_structure);
-router.delete('/nlu_structure/:id', delete_nlu_structure);
+router.put('/nlu_structure/:id', passport.authenticate('jwt', {session: false}), put_nlu_structure);
+router.delete('/nlu_structure/:id',  delete_nlu_structure);
 
 export default router
+
