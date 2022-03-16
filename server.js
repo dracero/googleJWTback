@@ -66,7 +66,9 @@ const authUser = (request, accessToken, refreshToken, profile, done) => {
 
 //set the JWT options
 const jwtOptions ={} 
-jwtOptions.jwtFromRequest = ExtractJwt.fromUrlQueryParameter('secret_token'); 
+//jwtOptions.jwtFromRequest = ExtractJwt.fromUrlQueryParameter('secret_token'); 
+jwtOptions.jwtFromRequest=ExtractJwt.fromExtractors([ExtractJwt.fromUrlQueryParameter("secret_token"), ExtractJwt.fromHeader("secret_token"), ExtractJwt.fromAuthHeaderAsBearerToken()]);
+//here we have defined all possible extractors in an array
 jwtOptions.secretOrKey = process.env.JWT_SECRET_KEY;
 
 //Use "GoogleStrategy" as the Authentication Strategy

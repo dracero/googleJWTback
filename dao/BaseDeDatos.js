@@ -1,4 +1,19 @@
 import NLU from "../models/NLU.js"
+import winston from 'winston'
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+      //
+      // - Write all logs with importance level of `error` or less to `error.log`
+      // - Write all logs with importance level of `info` or less to `combined.log`
+      //
+      new winston.transports.File({ filename: 'error.log', level: 'error' }),
+      new winston.transports.File({ filename: 'combined.log' }),
+    ],
+  });
 
 class ErrorNameAlreadyExists extends Error {
     
@@ -148,6 +163,10 @@ class BaseDeDatos {
                 }
                 else{
                     console.log("Updated id: ", id);
+                    logger.log({
+                        level: 'info',
+                        message: 'Hello distributed log files!'
+                      });
                 }
             });
 
@@ -167,7 +186,10 @@ class BaseDeDatos {
             console.log("Error: ID vacía.");
             throw new ErrorFieldIsEmpty("id");
         }
-
+        logger.log({
+            level: 'info',
+            message: 'Hello distributed log files!'
+          });
         return this.NLUModel.findByIdAndDelete(id);
     }
 }
